@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/core/AppComponent"],function(e){"use strict";const n=e.extend("sap.fe.cap.travel_analytics.Component",{metadata:{manifest:"json"}});return n});
+//# sourceMappingURL=Component.js.map

@@ -1,0 +1,48 @@
+# CAP sflight
+_out
+node_modules/
+target/
+.reloadtrigger
+@cds-models/
+
+# Web IDE, App Studio
+.che/
+.gen/
+
+# MTA
+*_mta_build_tmp
+*.mtar
+mta_archives/
+/Makefile_*.mta
+
+# Other
+.DS_Store
+.npmrc
+*.orig
+*.log
+
+*.flattened-pom.xml
+
+
+# IDEs
+.idea
+*.iml
+.project
+.settings
+.classpath
+# .vscode/*
+# IMPORTANT: Do not exclude .vscode please!
+
+# Local dev
+.env
+.values.yaml
+.cdsrc-private.json
+
+# Exclude Helm chart for this example
+/chart
+
+# Experimental
+xxx_*
+xxx/*
+
+@cds-models
