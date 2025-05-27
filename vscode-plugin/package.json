@@ -1,0 +1,123 @@
+{
+  "name": "cap-in-the-pocket",
+  "displayName": "CAP-in-the-Pocket",
+  "description": "Runs CAP applications with one click.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "publisher": "parttimenerd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parttimenerd/cap-in-the-pocket-extension.git"
+  },
+  "keywords": ["cap", "sap", "spring-boot", "runner"],
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onView:runSpringBootView"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "runSpringBootContainer",
+          "title": "CAP-in-the-Pocket",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "runSpringBootContainer": [
+        {
+          "id": "runSpringBootView",
+          "name": "CAP-in-the-Pocket",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CAP-in-the-Pocket",
+      "properties": {
+        "cap-in-the-pocket.serverPort": {
+          "type": "number",
+          "default": 4004,
+          "description": "The port used by the CAP server"
+        },
+        "cap-in-the-pocket.killPortCommand": {
+          "type": "string",
+          "default": "(lsof -ti:${port} | xargs kill -9) || killall java || true",
+          "description": "Command to kill processes using the server port. Use '${port}' to reference the configured port."
+        },
+        "cap-in-the-pocket.runCommand": {
+          "type": "string",
+          "default": "mvn spring-boot:run -B",
+          "description": "Command to run the CAP application"
+        },
+        "cap-in-the-pocket.compileCommand": {
+          "type": "string",
+          "default": "mvn compile -B",
+          "description": "Command to compile the CAP application"
+        },
+        "cap-in-the-pocket.urlButtons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Button label"
+              },
+              "url": {
+                "type": "string",
+                "description": "URL to open"
+              }
+            }
+          },
+          "default": [],
+          "description": "Custom URL buttons to display in the panel"
+        },
+        "cap-in-the-pocket.enableLogFiltering": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable formatting and filtering of verbose log output"
+        },
+        "cap-in-the-pocket.logFilterRules": {
+          "type": "object",
+          "default": {
+            "shortenTimestamps": true,
+            "shortenClassNames": true,
+            "hideThreadInfo": true,
+            "useEmojis": true
+          },
+          "description": "Configure specific log filtering rules"
+        },
+        "cap-in-the-pocket.useDistUrl": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use /dist/ URLs instead of /webapp/ URLs for discovered applications"
+        },
+        "cap-in-the-pocket.maxLogMessages": {
+          "type": "number",
+          "default": 10000,
+          "description": "Maximum number of log messages to keep in the output view (0 for unlimited)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.70.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "media/**",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

@@ -1,0 +1,132 @@
+name: Build and Release Extension
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+  packages: read
+  issues: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - name: Install dependencies
+        run: cd vscode-plugin; npm ci
+        
+      - name: Compile TypeScript
+        run: cd vscode-plugin; npm run compile
+        
+      - name: Install vsce
+        run: cd vscode-plugin; npm install -g @vscode/vsce
+        
+      - name: Package Extension
+        run: cd vscode-plugin; vsce package
+        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vsix-package
+          path: "vscode-plugin/*.vsix"
+          
+  release:
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout for tag operations
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+          
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vsix-package
+          
+      - name: Get package info
+        id: package
+        run: |
+          VSIX_PATH=$(ls *.vsix)
+          echo "vsix_path=$VSIX_PATH" >> $GITHUB_OUTPUT
+          VERSION=$(echo $VSIX_PATH | grep -oP 'cap-in-the-pocket-\K[0-9]+\.[0-9]+\.[0-9]+')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          COMMIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          CURRENT_DATE=$(date +"%Y-%m-%d %H:%M")
+          echo "build_date=$CURRENT_DATE" >> $GITHUB_OUTPUT
+
+      # First step: Explicitly delete the existing release
+      - name: Delete existing release by tag
+        id: delete_release
+        run: |
+          # Get the release ID for the snapshot tag
+          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/snapshot | \
+            jq -r '.id')
+          
+          # If a release ID was found, delete it
+          if [ "$RELEASE_ID" != "null" ] && [ -n "$RELEASE_ID" ]; then
+            echo "Deleting existing release with ID: $RELEASE_ID"
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID
+            echo "deleted=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing release found with tag 'snapshot'"
+            echo "deleted=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      # Second step: Delete the tag itself
+      - name: Delete existing tag
+        run: |
+          # Try to delete the tag directly
+          git push --delete origin snapshot || true
+        continue-on-error: true
+      
+      # Third step: Create a fresh tag
+      - name: Create new tag
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git tag -f snapshot
+          git push -f origin snapshot
+        
+      # Final step: Create the release with the new tag
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.package.outputs.vsix_path }}
+          tag_name: snapshot
+          body: |
+            # 📦 Latest Snapshot Build
+            
+            **Version:** ${{ steps.package.outputs.version }}
+            **Commit:** [${{ steps.package.outputs.commit_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            
+            This is an automated snapshot build from the latest commit on the main branch.
+            
+            ## How to install
+            1. Download the .vsix file
+            2. In VS Code, go to Extensions (Ctrl+Shift+X)
+            3. Click the "..." menu in the top-right
+            4. Select "Install from VSIX..."
+            5. Browse to the downloaded file
+          name: Snapshot Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

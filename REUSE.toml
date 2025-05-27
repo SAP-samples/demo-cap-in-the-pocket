@@ -7,5 +7,11 @@ SPDX-PackageComment = "The code in this project may include calls to APIs (\"API
 [[annotations]]
 path = "*"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and demo-cap-in-the-pocket contributors"
+SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and contributors"
 SPDX-License-Identifier = "Apache-2.0
+
+[[annotations]]
+path = "vscode-plugin"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and contributors"
+SPDX-License-Identifier = "MIT

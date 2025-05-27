@@ -1,0 +1,884 @@
+body {
+  font-family: sans-serif;
+  padding: 10px;
+}
+
+/* Button styles */
+.large-button {
+  background-color: #007acc;
+  color: white;
+  font-size: 16px;
+  padding: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.top-buttons-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.extension-tagline {
+  margin: 12px 0;
+  text-align: center;
+  color: #888888;
+  font-size: 12px;
+  font-style: italic;
+  padding: 6px;
+  border-top: 1px solid #3c3c3c;
+  border-bottom: 1px solid #3c3c3c;
+  background-color: rgba(60, 60, 60, 0.1);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.extension-tagline::before {
+  content: "⚡";
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+/* Output log styles */
+#output {
+  margin-top: 15px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+  border-radius: 4px;
+  font-family: monospace;
+  line-height: 1;
+  font-size: 13px;
+  resize: vertical;
+  position: relative;
+}
+
+.timestamp {
+  color: #8a8a8a;
+  margin-right: 0px;
+}
+
+.log-level {
+  display: inline-block;
+  width: 5px;        /* Fixed width for all emoji icons */
+  text-align: center; /* Center the emoji within its container */
+  margin-right: 5px;
+}
+
+.component-name {
+  color: #569cd6;
+  font-weight: bold;
+  display: inline-block;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: hide;
+  vertical-align: bottom;
+}
+
+.maven-line {
+  color: #b0b0b0;
+  font-size: 0.95em;
+  font-family: monospace;
+  line-height: 1.2;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  background-color: rgba(40, 40, 40, 0.2); /* Subtle background to distinguish Maven logs */
+  border-left: 2px solid #444444;
+  padding-left: 5px;
+}
+
+.maven-warning {
+  border-left: 2px solid #ffcc00;
+}
+
+.maven-error {
+  border-left: 2px solid #f14c4c;
+}
+
+.maven-highlight {
+  font-weight: bold;
+  color: var(--vscode-charts-blue);
+  font-family: monospace;
+  margin-top: 8px;
+}
+
+.maven-module-header {
+  font-weight: bold;
+  color: var(--vscode-charts-orange);
+  font-family: monospace;
+  margin-top: 8px;
+  padding: 3px 0;
+}
+
+.maven-section-header {
+  font-weight: bold;
+  color: #5c7cfa;
+  margin: 8px 0;
+  padding: 2px 0;
+  border-radius: 3px;
+  background-color: rgba(92, 124, 250, 0.1);
+}
+
+/* Log line formatting */
+.log-line {
+  margin: 0;
+  padding: 2px 0;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.log-spacer {
+  height: 2px;
+}
+
+/* Special styling for different message types */
+.success-message {
+  color: #6a9955;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #f14c4c;
+  font-weight: bold;
+  background-color: rgba(241, 76, 76, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.warning-message {
+  color: #cca700;
+  font-weight: bold;
+  background-color: rgba(204, 167, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.start-message {
+  color: #4fc1ff;
+  font-weight: bold;
+}
+
+/* Keep Maven output more compact */
+.maven-line {
+  color: #b0b0b0;
+  font-size: 0.95em;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* URL Button styles */
+.url-buttons {
+  margin-top: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.url-button {
+  background-color: #2c2c32;
+  color: #cccccc;
+  border: 1px solid #3c3c3c;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: center;
+  font-size: 13px;
+}
+
+.url-button:hover {
+  background-color: #3c3c3c;
+}
+
+h3 {
+  margin-bottom: 10px;
+  color: #cccccc;
+  font-size: 14px;
+}
+
+.configuration-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #888888;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Logo and bubble animation styles */
+.lurking-logo {
+  position: fixed;
+  bottom: -120px; /* Half hidden: adjust based on actual logo size */
+  right: 20px;
+  width: 180px;
+  height: 180px;
+  z-index: 1;
+  opacity: 0.7;
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+  transition: bottom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.lurking-logo.revealed {
+  bottom: 0px; /* Fully revealed */
+  opacity: 1;
+}
+
+/* Bubble animations */
+.bubble {
+  position: absolute;
+  background-color: rgba(131, 220, 243, 0.6); /* Light blue color */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2; /* Make bubbles appear over the logo */
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+/* Bubble container to overlap with the logo */
+.bubble-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 220px;
+  height: 220px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2; /* Position above the logo */
+}
+
+/* Ensure all content is properly wrapped */
+.plain-text, .spring-log, .ascii-art {
+  white-space: pre-wrap;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .top-buttons-container {
+    flex-direction: column;
+  }
+  .large-button {
+    width: 100%;
+  }
+  .button-container {
+    flex-direction: column;
+  }
+  .url-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .component-name {
+    max-width: 60px; /* About 5 characters */
+  }
+
+  #output {
+    font-size: 12px;
+  }
+
+  .timestamp {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 280px) {
+  .component-name {
+    max-width: 40px; /* About 3 characters */
+  }
+}
+
+@media (max-width: 200px) {
+  .component-name {
+    max-width: 20px; /* About one character */
+  }
+}
+
+/* Mobile responsiveness for the lurking SAPMachine logo */
+@media (max-width: 600px) {
+  .lurking-logo {
+    width: 140px;
+    height: 140px;
+    right: 10px;
+    bottom: -90px; /* Adjust how much is hidden */
+  }
+
+  .lurking-logo.revealed {
+    bottom: -10px; /* Show less of the submarine */
+  }
+
+  /* Ensure the bubble container matches the logo size */
+  .bubble-container {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lurking-logo {
+    width: 110px;
+    height: 110px;
+    right: 5px;
+    bottom: -70px;
+    opacity: 0.6; /* More transparent on smaller screens */
+  }
+
+  .lurking-logo.revealed {
+    bottom: -20px;
+    opacity: 0.8;
+  }
+
+  .bubble-container {
+    width: 130px;
+    height: 130px;
+  }
+
+  /* Ensure buttons have enough space */
+  .url-buttons {
+    margin-bottom: 100px; /* Add space for the submarine */
+  }
+}
+
+@media (max-width: 350px) {
+  .lurking-logo {
+    width: 90px;
+    height: 90px;
+    bottom: -60px;
+  }
+
+  .lurking-logo.revealed {
+    bottom: -30px;
+  }
+
+  .bubble-container {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Add this to hide the submarine on very small screens */
+@media (max-width: 320px) {
+  .lurking-logo, .bubble-container {
+    display: none;
+  }
+}
+
+/* Separator line styling */
+.separator-line {
+  display: block;
+  border-top: 1px solid #3c3c3c;
+  margin: 6px 0;
+  height: 1px;
+}
+
+.stylish-separator {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--vscode-editor-foreground), transparent);
+}
+
+/* Unicode replacements for arrows */
+.unicode-arrow {
+  color: #4fc1ff;
+  font-weight: bold;
+}
+
+/* Highlighting important parts */
+.highlight-important {
+  color: #ffcc00;
+  font-weight: bold;
+  background-color: rgba(255, 204, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Maven build step styling */
+.maven-step {
+  color: #9cdcfe;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Maven module name styling */
+.maven-module {
+  color: #569cd6;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Spring Boot styling improvements */
+.spring-boot-version {
+  color: var(--vscode-charts-green);
+  text-align: left;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.ascii-art {
+  color: var(--vscode-terminal-ansiCyan);
+  text-align: left;
+}
+
+.maven-section-header {
+  font-weight: bold;
+  color: #5c7cfa;
+  margin: 8px 0;
+  padding: 2px 0;
+  border-radius: 3px;
+  background-color: rgba(92, 124, 250, 0.1);
+}
+
+/* JSON content formatting */
+.json-content {
+  font-family: monospace;
+  background-color: rgba(60, 60, 60, 0.2);
+  border-radius: 3px;
+  padding: 8px;
+  margin: 4px 0;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* JSON syntax highlighting colors */
+.json-key {
+  color: #9cdcfe;
+}
+
+.json-string {
+  color: #ce9178;
+}
+
+.json-number {
+  color: #b5cea8;
+}
+
+.json-boolean {
+  color: #569cd6;
+}
+
+.json-null {
+  color: #569cd6;
+}
+
+/* Highlighted patterns in log messages */
+.highlight-url {
+  color: #3794ff;
+  text-decoration: underline;
+}
+
+.highlight-path {
+  color: #c586c0;
+  font-style: italic;
+}
+
+.highlight-port {
+  color: #b5cea8;
+  font-weight: bold;
+}
+
+.highlight-id {
+  color: #b5cea8;
+  font-weight: bold;
+}
+
+.highlight-action {
+  color: #4fc1ff;
+  font-weight: bold;
+}
+
+.highlight-classname {
+  color: #c9e5f5;
+  font-weight: bold;
+}
+
+/* Security warning boxes styling */
+.security-box-border {
+  height: 6px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--vscode-editor-foreground) 0px,
+    var(--vscode-editor-foreground) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  margin: 0;
+  border-radius: 3px;
+}
+
+.security-box-content {
+  font-weight: bold;
+  color: #e6c07b;
+  background-color: rgba(230, 192, 123, 0.1);
+  padding: 6px 10px;
+  margin: 0;
+  border-left: 3px solid #e6c07b;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.security-box-warning {
+  font-weight: bold;
+  color: #f14c4c;
+  background-color: rgba(241, 76, 76, 0.1);
+  padding: 6px 10px;
+  margin: 0;
+  border-left: 3px solid #f14c4c;
+  text-align: center;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+/* Search bar styling */
+.search-container {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: var(--vscode-editor-background);
+  border-bottom: 1px solid var(--vscode-panel-border);
+  transform: translateY(-100%);
+  transition: transform 0.2s ease;
+  display: none; /* Hide by default */
+}
+
+.search-container.visible {
+  transform: translateY(0);
+  display: flex;
+}
+
+#searchInput {
+  flex-grow: 1;
+  margin-right: 8px;
+  padding: 4px 8px;
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 2px;
+}
+
+#searchResults {
+  margin: 0 8px;
+  min-width: 20px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.search-container button {
+  padding: 4px 8px;
+  margin-left: 4px;
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.search-match-current {
+  background-color: var(--vscode-editor-findMatchHighlightBackground);
+  outline: 1px solid var(--vscode-editor-findMatchHighlightBorder);
+}
+
+.search-icon {
+  position: fixed;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.search-icon:hover {
+  opacity: 1;
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.search-container button#toggleCase {
+  font-weight: bold;
+  padding: 4px 4px;
+}
+
+.search-container button#toggleCase.active {
+  background-color: #0078d4;
+  color: white;
+}
+
+.search-container button#toggleRegex {
+  font-weight: bold;
+  padding: 4px 4px;
+  margin-left: 4px;
+}
+
+.search-container button#toggleRegex.active {
+  background-color: #0078d4;
+  color: white;
+}
+
+@media (max-width: 450px) {
+  .search-container button#toggleCase,
+  .search-container button#toggleRegex {
+    display: none; /* Hide buttons on small screens */
+  }
+  #searchResults {
+    display: none; /* Hide search results on small screens */
+  }
+}
+
+@media (max-width: 350px) {
+  .search-container {
+    display: none !important;
+  }
+  .search-icon {
+    display: none !important;
+  }
+}
+
+.highlight-progress {
+  color: #6bb0ff;
+  font-weight: bold;
+  padding: 0 2px;
+  background-color: rgba(107, 176, 255, 0.1);
+  border-radius: 3px;
+}
+
+/* Maven build summary formatting */
+.maven-separator hr {
+  border: none;
+  border-top: 1px dashed #666;
+  margin: 4px 0;
+}
+
+.maven-summary-header {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-top: 4px;
+  color: #569cd6;
+}
+
+.build-success {
+  color: #3c9c3c;
+  font-weight: bold;
+}
+
+.build-failure {
+  color: #e51400;
+  font-weight: bold;
+}
+
+.maven-module-result {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  margin: 3px 0;
+  border-radius: 4px;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.maven-module-result .module-name {
+  font-weight: 500;
+  flex: 0 1 auto;
+  margin-right: auto;
+  overflow: hidden;
+  text-overflow: hidden;
+  max-width: 60%;
+}
+
+.maven-module-result .module-status {
+  flex: 0 0 auto;
+  margin: 0 12px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maven-module-result .module-time {
+  flex: 0 0 auto;
+  color: #999;
+  font-size: 0.9em;
+  font-family: monospace;
+  padding: 0 4px;
+  margin-left: auto;
+}
+
+.maven-module-result .module-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.maven-module-result .module-status {
+  margin: 0 12px;
+  font-size: 16px;
+}
+
+.maven-module-result .module-time {
+  color: #999;
+  font-size: 0.9em;
+  font-family: monospace;
+  padding: 0 4px;
+}
+
+.module-success {
+  background-color: rgba(60, 156, 60, 0.1);
+  border-left: 3px solid #3c9c3c;
+}
+
+.module-failure {
+  background-color: rgba(229, 20, 0, 0.1);
+  border-left: 3px solid #e51400;
+}
+
+.maven-timing-info {
+  color: #999;
+  font-style: italic;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background-color: rgba(60, 60, 60, 0.2);
+}
+
+.timing-icon {
+  font-size: 16px;
+}
+
+.timing-label {
+  font-weight: 500;
+  color: #bbb;
+}
+
+.timing-date {
+  color: #569cd6;
+}
+
+.timing-time {
+  color: #ce9178;
+  font-family: monospace;
+}
+
+.warning-icon {
+  font-size: 18px;
+  color: #ffcc00;
+  margin-right: 4px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Maven phase message styling */
+.maven-phase {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  margin: 8px 0;
+  background-color: rgba(90, 90, 90, 0.2);
+  border-left: 3px solid #569cd6;
+  border-radius: 4px;
+  font-family: monospace;
+  position: relative;
+}
+
+.maven-phase::before {
+  content: "⚙️";
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.maven-plugin {
+  font-weight: 600;
+  color: #569cd6;
+  margin-right: 6px;
+}
+
+.maven-goal {
+  color: #ce9178;
+  margin-right: 6px;
+  font-style: italic;
+}
+
+.maven-version {
+  color: #999;
+  font-size: 0.85em;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
+.maven-module {
+  margin-left: auto;
+  font-weight: 500;
+  color: #4ec9b0;
+}
+
+.warning-icon {
+  font-size: 20px;
+  color: #ffcc00;
+  margin-right: 4px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.log-level-warn {
+  color: #ffcc00;
+  font-size: 1.8em;
+  line-height: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Spring Boot log separator - add this to clearly mark where Spring Boot starts */
+.spring-boot-start {
+  margin: 8px 0;
+  padding: 5px;
+  background: linear-gradient(to right, rgba(86, 156, 214, 0.1), rgba(86, 156, 214, 0.3));
+  border-radius: 4px;
+  border-left: 3px solid #569cd6;
+  font-weight: bold;
+  text-align: center;
+}
