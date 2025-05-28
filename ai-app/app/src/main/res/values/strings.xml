@@ -13,7 +13,17 @@
     
     <!-- Download progress strings -->
     <string name="downloading_model">Downloading model: %1$d%%</string>
-    <string name="downloading_model_with_estimate">Downloading model: %1$d%% (about %2$s remaining)</string>
+    <string name="downloading_model_with_estimate">Downloading model: %1$d%%\n%2$s</string>
     <string name="download_complete">Download complete</string>
     <string name="download_failed">Download failed: %1$s</string>
+    <string name="no_space_error">Not enough storage space.</string>
+    
+    <string name="app_info"><![CDATA[
+        This app uses a <a href="https://huggingface.co/litert-community/Qwen2.5-1.5B-Instruct">Qwen2.5-1.5B-Instruct model</a>
+        model to answer basic questions. You can also access it via <br><br><tt>curl -X POST "http://localhost:8087/generate" \<br>
+        -H "Content-Type: application/json" \<br>
+        -d \'{\"prompt\": \"What is the capital of France?"}\'</tt><br><br>
+        <b>Note:</b> This app is highly experimental and is only used for a demo
+        (see <a href="https://github.com/SAP-samples/demo-cap-in-the-pocket">GitHub</a>).
+    ]]></string>
 </resources>

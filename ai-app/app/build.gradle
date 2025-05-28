@@ -32,6 +32,9 @@ android {
 }
 
 dependencies {
+    // Add ViewModel dependency
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation 'com.google.mediapipe:tasks-genai:0.10.24'
     implementation 'com.google.mediapipe:tasks-core:0.10.18'
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'

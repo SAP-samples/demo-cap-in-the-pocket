@@ -16,7 +16,7 @@ import java.io.FileOutputStream
 
 class AIMessageProcessor(private val context: Context) {
 
-    val MAX_TOKENS = 100;
+    val MAX_TOKENS = 50;
 
     private var textGenerator: LlmInference? = null
     private val modelDownloader = ModelDownloader(context)
@@ -82,7 +82,7 @@ class AIMessageProcessor(private val context: Context) {
                 // Configure MediaPipe TextGenerator with model caching enabled
                 val options = LlmInferenceOptions.builder()
                     .setModelPath(modelFile.absolutePath)
-                    .setPreferredBackend(LlmInference.Backend.GPU)
+                    .setPreferredBackend(LlmInference.Backend.DEFAULT)
                     .setMaxTokens(MAX_TOKENS)
                     .build()
 

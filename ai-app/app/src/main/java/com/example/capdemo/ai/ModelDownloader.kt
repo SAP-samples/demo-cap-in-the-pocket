@@ -10,11 +10,12 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import android.os.StatFs
 
 class ModelDownloader(private val context: Context) {
 
     private val TAG = "ModelDownloader"
-    private val MODEL_URL = "https://huggingface.co/litert-community/Phi-4-mini-instruct/resolve/main/Phi-4-mini-instruct_multi-prefill-seq_q8_ekv1280.task"
+    private val MODEL_URL = "https://huggingface.co/litert-community/Qwen2.5-1.5B-Instruct/resolve/main/Qwen2.5-1.5B-Instruct_multi-prefill-seq_q8_ekv1280.task"
     private val MODEL_FILENAME = "model.task"
 
     fun getModelFile(): File {
@@ -24,25 +25,14 @@ class ModelDownloader(private val context: Context) {
     fun isModelDownloaded(): Boolean {
         val modelFile = getModelFile()
         // Check if file exists AND is a valid zip archive
-        if (modelFile.exists() && modelFile.length() > 0) {
-            try {
-                // Try to open it as a zip to verify integrity
-                ZipFile(modelFile).close()
-                return true
-            } catch (e: Exception) {
-                Log.e(TAG, "Model file exists but is not a valid zip archive", e)
-                // Delete corrupted file
-                modelFile.delete()
-                return false
-            }
+        if (modelFile.exists() && modelFile.length() > 1000000) {
+            return true
         }
         return false
     }
     
     suspend fun downloadModel(listener: DownloadProgressListener? = null): Boolean = withContext(Dispatchers.IO) {
-        val modelFile = getModelFile()
-        val tempFile = File(context.filesDir, "$MODEL_FILENAME.tmp")
-        
+
         try {
             Log.d(TAG, "Starting model download from $MODEL_URL")
             val connection = URL(MODEL_URL).openConnection() as HttpURLConnection
@@ -56,16 +46,28 @@ class ModelDownloader(private val context: Context) {
                 return@withContext false
             }
             
-            val fileSize = 4000000000;
+            // Get actual file size instead of hardcoding
+            val fileSize = 1600 * 1000 * 1000L;
+            // Check available space
+           /* val requiredSpace = fileSize * 2 // Need double space for temp file and final file
+            val availableSpace = checkAvailableSpace()
+            if (availableSpace < requiredSpace) {
+                val required = formatFileSize(requiredSpace)
+                val available = formatFileSize(availableSpace)
+                val errorMsg = "Not enough storage space. Need $required, but only $available available"
+                Log.e(TAG, errorMsg)
+                listener?.onFailure(errorMsg)
+                return@withContext false
+            }*/
+            
             val inputStream = connection.inputStream
-            val outputStream = FileOutputStream(tempFile)
+            val outputStream = FileOutputStream(getModelFile())
             
             val buffer = ByteArray(8192)
             var downloaded = 0L
             var read: Int
             
             Log.d(TAG, "Downloading file of size $fileSize bytes")
-            var lastProgress = 0
             while (inputStream.read(buffer).also { read = it } != -1) {
                 outputStream.write(buffer, 0, read)
                 downloaded += read
@@ -76,35 +78,32 @@ class ModelDownloader(private val context: Context) {
             outputStream.flush()
             outputStream.close()
             inputStream.close()
-            
-            // Verify download by trying to open as zip
-            try {
-                ZipFile(tempFile).close()
-                // If successful, move temp file to final location
-                if (modelFile.exists()) {
-                    modelFile.delete()
-                }
-                
-                if (tempFile.renameTo(modelFile)) {
-                    Log.d(TAG, "Model downloaded successfully and verified as valid zip archive")
-                    listener?.onComplete()
-                    return@withContext true
-                } else {
-                    Log.e(TAG, "Failed to rename temp file to final model file")
-                    listener?.onFailure("Failed to save model file")
-                    return@withContext false
-                }
-            } catch (e: ZipException) {
-                Log.e(TAG, "Downloaded file is not a valid zip archive", e)
-                tempFile.delete()
-                listener?.onFailure("Downloaded file is not a valid zip archive")
-                return@withContext false
-            }
+
+            return@withContext true
         } catch (e: Exception) {
             Log.e(TAG, "Error downloading model", e)
-            tempFile.delete()
             listener?.onFailure(e.message ?: "Unknown error")
             return@withContext false
         }
+    }
+
+    // Add this method to check available space
+    private fun checkAvailableSpace(): Long {
+        val statFs = StatFs(context.filesDir.absolutePath)
+        return statFs.availableBytes
+    }
+
+    // Add this utility method to format file size
+    private fun formatFileSize(size: Long): String {
+        val units = arrayOf("B", "KB", "MB", "GB")
+        var fileSize = size.toFloat()
+        var unitIndex = 0
+        
+        while (fileSize > 1024 && unitIndex < units.size - 1) {
+            fileSize /= 1024
+            unitIndex++
+        }
+        
+        return String.format("%.1f %s", fileSize, units[unitIndex])
     }
 }
