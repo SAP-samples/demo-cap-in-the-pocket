@@ -39,7 +39,7 @@ cd demo-cap-in-the-pocket
 ```
 
 Install [SapMachine](https://sapmachine.io) and VSCode either by running
-the [./install.sh] script or by running:
+the [./install.sh](./install.sh) script or by running:
 
 ```sh
 # Install SapMachine
@@ -64,7 +64,7 @@ For more background information, visit [mostlynerdless.de](https://mostlynerdles
 
 ## Launch
 
-Now you can now run VSCode at port 8080 either by running [./vscode.sh] script
+Now you can now run VSCode at port 8080 either by running [./vscode.sh](./vscode.sh) script
 or by running:
 
 ```sh
