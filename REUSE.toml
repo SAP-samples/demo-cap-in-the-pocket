@@ -9,3 +9,9 @@ path = "**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and Demo Cap In The Pocket Contributors"
 SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "cap-flight/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 SAP SE or an SAP affiliate company and cap-sflight contributors"
+SPDX-License-Identifier = "Apache-2.0"
