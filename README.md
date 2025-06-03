@@ -27,7 +27,7 @@ Launch the Termux app and set up an emulated Ubuntu environment:
 ```sh
 pkg install proot-distro
 proot-distro install ubuntu
-proot-distro login ubuntu --termux-home
+proot-distro login ubuntu
 ```
 
 Clone this repository in the Ubuntu shell:
@@ -68,7 +68,7 @@ Now you can now run VSCode at port 8080 either by running [./vscode.sh](./vscode
 or by running:
 
 ```sh
-nohup code serve-web --port 8080 --without-connection-token --no-sandbox --user-data-dir ~ & 
+nohup code serve-web --port 8080 --without-connection-token &
 ```
 
 And access it in the browser at [localhost:8080](localhost:8080).
