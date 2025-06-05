@@ -1,6 +1,8 @@
 #!/bin/bash
 
-ech "Installing SapMachine"
+apt install -y maven
+
+echo "Installing SapMachine"
 wget -qO- https://dist.sapmachine.io/debian/sapmachine.key | tee /etc/apt/trusted.gpg.d/sapmachine.asc > /dev/null
 echo "deb https://dist.sapmachine.io/debian/$(dpkg --print-architecture)/ ./" | tee /etc/apt/sources.list.d/sapmachine.list > /dev/null
 apt update -y

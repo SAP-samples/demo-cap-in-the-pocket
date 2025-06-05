@@ -33,6 +33,7 @@ proot-distro login ubuntu
 Clone this repository in the Ubuntu shell:
 
 ```sh
+apt update
 apt install git wget
 git clone https://github.com/SAP-samples/demo-cap-in-the-pocket
 cd demo-cap-in-the-pocket
