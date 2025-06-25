@@ -9,7 +9,7 @@ apt update -y
 apt install -y sapmachine-21-jdk
 
 echo "Installing VSCode"
-wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64' -O code.deb
+wget "https://update.code.visualstudio.com/1.100.3/linux-deb-arm64/stable" -O code.deb
 apt install -y ./code.deb
 # Install the missing packages
 apt -y --fix-broken install
