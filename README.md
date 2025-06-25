@@ -22,15 +22,15 @@ of the developer mode.
 
 ## Setup
 
-Launch the Termux app and set up an emulated Ubuntu environment:
+Launch the Termux app and set up an emulated Debian environment:
 
 ```sh
 pkg install proot-distro
-proot-distro install ubuntu
-proot-distro login ubuntu
+proot-distro install debian
+proot-distro login debian
 ```
 
-Clone this repository in the Ubuntu shell:
+Clone this repository in the Debian shell:
 
 ```sh
 apt update
